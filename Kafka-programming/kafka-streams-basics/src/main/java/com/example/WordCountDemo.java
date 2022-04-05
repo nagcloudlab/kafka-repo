@@ -1,48 +1,60 @@
 package com.example;
 
-import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KStreamBuilder;
 import org.apache.kafka.streams.kstream.KTable;
+import org.apache.kafka.streams.state.KeyValueStore;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Properties;
+import java.util.concurrent.CountDownLatch;
 
 public class WordCountDemo {
     public static void main(String[] args) {
+        Properties props = new Properties();
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-wordcount");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
 
-        Properties config = new Properties();
-        config.put(StreamsConfig.APPLICATION_ID_CONFIG, "wordcount-application");
-        config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
-        config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        config.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
-        config.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+        final KStreamBuilder builder = new KStreamBuilder();
 
-        KStreamBuilder builder = new KStreamBuilder();
-        // 1 - stream from Kafka
         KStream<String, String> textLines = builder.stream("streams-plaintext-input");
 
-
-        KTable<String,Long> wordCounts=textLines
-                // 2 - map values to lowercase
-                .mapValues(textLine->textLine.toLowerCase())
-                // 3 - flatmap values split by space
-                .flatMapValues(textLine -> Arrays.asList(textLine.split("\\W+")))
-                // 4 - select key to apply a key (we discard the old key)
-                .selectKey((key,word)->word)
-                // 5 - group by key before aggregation
-                .groupByKey()
-                // 6 - count occurences
-                .count("Counts");
+        KTable<String, Long> wordCounts =
+                textLines
+                        .mapValues(textLine -> textLine.toLowerCase())
+                        .flatMapValues(textLine -> Arrays.asList(textLine.split("\\W+")))
+                        .selectKey((key, word) -> word)
+                        .groupByKey()
+                        .count();
 
         // 7 - to in order to write the results back to kafka
-        wordCounts.to(Serdes.String(), Serdes.Long(), "streams-wordcount-output");
+        wordCounts.to(Serdes.String(), Serdes.Long(), "word-count-output");
 
-        KafkaStreams streams = new KafkaStreams(builder, config);
-        streams.start();
+        final KafkaStreams streams = new KafkaStreams(builder, props);
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        // attach shutdown handler to catch control-c
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                streams.close();
+                latch.countDown();
+            }
+        });
+
+        try {
+            streams.start();
+            latch.await();
+        } catch (Throwable e) {
+            System.exit(1);
+        }
 
     }
 }

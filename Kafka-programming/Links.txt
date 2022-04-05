@@ -9,3 +9,7 @@ https://docs.google.com/presentation/d/1AF7LFu0oNTvTPJ_RghdDTKjxA9HeSgisJFKLXcE2
 Notion page
 
 https://developing-furniture-976.notion.site/CLI-ed9cd2ea64d54e6ea038b5e040ccfc1a
+
+Kafka-streams slides
+
+https://developing-furniture-976.notion.site/Kafka-Streams-Api-757b1ab01c6945ba843e0f5ab779a92a
