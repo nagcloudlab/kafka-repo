@@ -29,10 +29,10 @@
       </GradleProjectSettings>
       <GradleProjectSettings>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/kafka-spring-invoice-gen" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/kafka-spring-invoice-producer" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$/kafka-spring-invoice-gen" />
+            <option value="$PROJECT_DIR$/kafka-spring-invoice-producer" />
           </set>
         </option>
       </GradleProjectSettings>

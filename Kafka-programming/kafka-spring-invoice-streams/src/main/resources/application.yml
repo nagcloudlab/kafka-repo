@@ -1,0 +1,25 @@
+
+spring:
+  cloud:
+    stream:
+      bindings:
+        pos-input-channel:
+          destination: pos-topic
+      kafka:
+        streams:
+          binder:
+            brokers:  localhost:9092
+            configuration:
+              processing.guarantee: exactly_once
+              default:
+                deserialization:
+                  type: com.example.model.PosInvoice
+                  exception:
+                    handler: org.apache.kafka.streams.errors.LogAndContinueExceptionHandler
+                key:
+                  serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                value:
+                  serde: org.springframework.kafka.support.serializer.JsonSerde
+
+
+
