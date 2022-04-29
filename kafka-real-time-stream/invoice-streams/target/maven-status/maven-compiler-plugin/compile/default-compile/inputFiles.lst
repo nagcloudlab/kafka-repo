@@ -1,0 +1,5 @@
+/home/nag/tech/training/kafka-real-time-stream/invoice-streams/src/main/java/com/example/types/Notification.java
+/home/nag/tech/training/kafka-real-time-stream/invoice-streams/src/main/java/com/example/types/HadoopRecord.java
+/home/nag/tech/training/kafka-real-time-stream/invoice-streams/src/main/java/com/example/types/DeliveryAddress.java
+/home/nag/tech/training/kafka-real-time-stream/invoice-streams/src/main/java/com/example/types/PosInvoice.java
+/home/nag/tech/training/kafka-real-time-stream/invoice-streams/src/main/java/com/example/types/LineItem.java
