@@ -1,0 +1,37 @@
+#spring:
+#  cloud:
+#    stream:
+#      bindings:
+#        notification-input-channel:
+#          destination: pos
+#        notification-output-channel:
+#          destination: loyalty
+#        hadoop-input-channel:
+#          destination: pos
+#        hadoop-output-channel:
+#          destination: hadoop-sink
+#      kafka:
+#        streams:
+#          binder:
+#            brokers:  localhost:9092
+
+
+
+
+spring:
+  cloud:
+    stream:
+      bindings:
+        pos-input-channel:
+          destination: pos
+      kafka:
+        streams:
+          binder:
+            brokers:  localhost:9092
+            configuration:
+              processing.guarantee: exactly_once
+              default:
+                key:
+                  serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                value:
+                  serde: org.springframework.kafka.support.serializer.JsonSerde

@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    stream:
+      function:
+        definition: suffix;upperCase;consume
+      bindings:
+        suffix-in-0:
+          destination: greetings
+        suffix-out-0:
+          destination: greetings-suffixed
+        upperCase-in-0:
+          destination: greetings-suffixed
+        upperCase-out-0:
+          destination: greetings-upper
+        consume-in-0:
+          destination: greetings-upper

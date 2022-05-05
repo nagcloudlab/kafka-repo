@@ -1,2 +1,0 @@
-com/example/JsonPosGeneratorApplicationTests.java
- com.example.JsonPosGeneratorApplicationTests

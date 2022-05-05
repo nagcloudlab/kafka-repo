@@ -1,0 +1,5 @@
+rootProject.name = 'level1'
+include 'kafka-basics'
+include 'kafka-producer-wikimedia'
+include 'kafka-consumer-opensearch'
+

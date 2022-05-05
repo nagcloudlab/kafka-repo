@@ -1,7 +1,0 @@
-rootProject.name = 'Kafka-programming'
-include 'kafka-basics'
-include 'kafka-producer-wikimedia'
-include 'kafka-consumer-opensearch'
-include 'kafka-streams-basics'
-include 'kafka-streams-basics'
-
